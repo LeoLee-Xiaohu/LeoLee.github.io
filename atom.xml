@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://leolee-xiaohu.github.io/bigcat.blog/</id>
+    <title>Big Cat Leo&apos;s Bookshelf</title>
+    <updated>2022-09-19T06:15:53.237Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://leolee-xiaohu.github.io/bigcat.blog/"/>
+    <link rel="self" href="https://leolee-xiaohu.github.io/bigcat.blog/atom.xml"/>
+    <subtitle>Sharing knowledge and experience</subtitle>
+    <logo>https://leolee-xiaohu.github.io/bigcat.blog/images/avatar.png</logo>
+    <icon>https://leolee-xiaohu.github.io/bigcat.blog/favicon.ico</icon>
+    <rights>All rights reserved 2022, Big Cat Leo&apos;s Bookshelf</rights>
+    <entry>
+        <title type="html"><![CDATA[Powerful data pipeline with the boost of DBT ]]></title>
+        <id>https://leolee-xiaohu.github.io/bigcat.blog/post/powerful-data-pipeline-with-the-boost-of-dbt/</id>
+        <link href="https://leolee-xiaohu.github.io/bigcat.blog/post/powerful-data-pipeline-with-the-boost-of-dbt/">
+        </link>
+        <updated>2022-09-18T05:50:26.000Z</updated>
+        <content type="html"><![CDATA[<p>第一次尝试用英文写一篇关于数据工程技术文章。一方面分享下学习体会，另一方面锻炼自己对技术的理解。</p>
+<p>This article is the first try at using DBT in a big data pipeline project, IMBA. I would like to share my experience of using DBT.</p>
+<p>When I combine DBT with Airflow, I feel the beauty of transformation and orchestration. Before I used DBT, I did not think SQL was a powerful language for data engineers because SQL is not like a programing language, such as python, and is not as flexible as python. However, after using DBT, I don't think SQL is not powerful anymore. What python can do for RDMS can be done by SQL as well. What's more, SQL is easier to write and read and its logic is much clearer than python or scala, which means SQL is easier to maintain.</p>
+<p>Now, let's move deeper into our ELT Pipeline design firstly. The Kinesis Firehose would monitor the order data generated on the frontend in real-time and extract the streaming data into s3. Once s3 receives the streaming data in a particular bucket, it would trigger an event to send sqs to Snowflake snowpipe. The snowpipe would load the streaming data into the snowflake database immediately and automatically. After extracting and loading, BDT would start transformation work. With the help of DBT, I achieved some enhancements, including a clear transformation logic, distinct data lineage, flexible data tests and incremental models. I also used docker to set up the Airflow environment, orchestrate DBT transformation works, and unload the processed final data for Machine Learning into s3 as snowflake external staging data.</p>
+<figure data-type="image" tabindex="1"><img src="https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/a879c6804e3854d04415d16e72b5fe180a8b0ae096e23723.png" alt="" loading="lazy"></figure>
+<p>As you can see, the following picture shows the data lineage of our transformation works, which will help data scientists trace and trust our data. Here, I have two main branches, daily_order_results and non_daily_order_results. Daily_order_results use daily orders, which change and increase as business goes on, while I also use non-daily-order data such as departments and aisles id. By entirely using these data, I can feed data scientists more valuable data to do feature engineering and help them improve the performance of predicting models.</p>
+<figure data-type="image" tabindex="2"><img src="https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/37b33ffd550a42e2084ed4e6e57235901e404a0adb8b3e91.png" alt="" loading="lazy"></figure>
+<p>I also did lots of data testing work to ensure that our data provided to data analysts and scientists are clean and qualified. Our pipeline automatically tests the uniqueness, null value, and relationship integrity. I also used dbt_expectations, a dbt package, to achieve more customized tests. For example, I can test that the particular column of department id must be between 0 and 135. If the final data of the department id are not in this range, it will not pass the test and notify us of the error in the log file. By implementing the tests, our final data prepared for machine learning is 100% correct and high quality.</p>
+<figure data-type="image" tabindex="3"><img src="https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/54e704c34f7326401bfe48a239d174bcf8782dd1b0b8358a.png" alt="" loading="lazy"></figure>
+<p>先写到这里了，之后有空再来改。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[大猫的土澳求职之旅一：工作与职业的思考]]></title>
+        <id>https://leolee-xiaohu.github.io/bigcat.blog/post/hello-gridea/</id>
+        <link href="https://leolee-xiaohu.github.io/bigcat.blog/post/hello-gridea/">
+        </link>
+        <updated>2022-09-11T14:04:42.000Z</updated>
+        <content type="html"><![CDATA[<p>今天上午把自己的个人网站给创建好了，作为尝试使用Gridea搭建个人网站的第一篇文章，随笔写下此刻的心情。</p>
+<p>昨天虽然是中秋节，但心情一点都不好，不知是“每逢佳节倍思亲”还是因为求职不顺的原因，不想讲话，肚子了窝着难以言喻的火，有生活琐事的不畅，有怀才不遇的苦恼，也许也就是单纯情绪化的波动，毕竟长期以来自己一直是理性克制，也需要一个释放的窗口，也需要一段时间让自己发泄排解心中的不甘与愤怒。</p>
+<p>前辈说“在澳洲，男人活得不如狗！”，虽然很玩笑，听上去有那么点心酸，是啊，我们男人活能有狗好吗？我们家对面的两只狗，心情不好可以大声狂叫，没人投诉，还会有女生常常去看望喂火腿肠什么的。我们男人呢？要是你心情不好，敢对着你老婆乱吼，那完了，等着来自女人的恐怖吧，可能迎接的是无休止的叨扰与雪上加霜。女人心情不好，可以哭，男人还得哄；男人心情不好受委屈只能自己吞，不好找男人述说（男人死要面子，情感问题总归是隐私非理性敏感的），更绝对不能找异性述说（搞不好就踩雷、惹一身麻烦）。男人还得考虑经济问题，面对经济压力不说，谋划5年乃至10年的未来，如果有人家庭小孩该怎么办，各种操心的事情，各种账单问题。看看澳洲人对狗的态度，不知道有多喜欢，拉个屎犯个错，都能包容。男人如果做错了什么，那就是批评甚至F。狗多舒服啊，大院子撒欢不说，还可以专程去狗狗公园溜达，基本是自由自在随心所欲。男人呢？经常不想干的事情还必须得去干，好难。很烦，大男孩、老男孩也想任性一回。</p>
+<p>闲扯了一堆，正式进入思考的主题“工作与职业如何选择”：</p>
+<p>工作对于男人来说几乎是最高优先级的思考了。身上的担子越重，工作的选择和内容越重。我们要做什么、可以做什么？作为男人未来靠什么养家糊口？一年能赚多少钱？这都是摆在男人面前非常现实的问题。也导致很多人是以“工资薪酬多少”为导向的，什么赚的多就往什么地方扎，导致我那个年代，国内的高考状元要么选择金融专业，要么选互联网相关行业，哪个来钱快去哪里。大多数人，我看到的，他们眼中的工作只是一份工作，有的上班摸摸鱼，有的很勤奋经常加班，但也是迫于压力而不是热爱。工作仅仅是一份工作吗？这也是我最近的困惑与思考。以前我什么都做，在基金公司，在房地产公司，在银行，可是这些工作是我真正喜欢的吗？不是。</p>
+<p>我真正喜欢做的有两个职业方向，一个是数据工程师，一个是股票投资人。数据工程与数据打交道，很有魅力，随着年龄的增长，看到过太多谎言，只有未经篡改的原始数据是最真实的，通过看数据能够一眼拆穿一个个“好听的故事”。我很喜欢做将这些原本没什么规律或者杂乱无章的数据，通过技术手段清理出来，变成能讲话的助手，将一些商业逻辑商业现状跟你娓娓道来。操作数据，让数据如流水般在数据管道里自动为我们呈现价值，是一件非常有意思的事情。另一个，股票投资，我已经从事很多年了，它很有意思，能够让读书学习变得不再枯燥，能让我变成查理芒格说的“学习机器”。如果没有股票，也许我会没有太多动力读各种各样的书，也会失去很多精神上的愉悦。股票投资的好处就是让我不断的结合现实与读书，读书不再是无用论，而是可以在获得思想的同时实实在在地获得金钱回报。股票投资=读书赚钱。只有读的书越多，知识面广，认知体系健全，博古通今，才能躺着在股市里挣钱。并且股票投资人只能给自己打工，不能拿着别人的钱做投资，所以这能是一个副业，贯穿一生的副业。所以我选的两个最终人生职业方向，都是知识学习型，都需要不断的学习更新技能更新思想，与时俱进，我很喜欢这样的工作，具有一定挑战性，需要不断学习的职业。</p>
+<p>经过以上这一层职业方向思考后，工作在我眼里发生了变化，不再是维持生活打工赚钱的工具，而是一份持续一生的热爱事业。我为谁工作？我为我自己工作，工作不仅是一个简单的被雇佣的关系，而是包括了自雇。给人打工的同时也是在给自己打工，这个工作是值得自己一辈子去做的事情，每一段公司的工作经历都应该沿着一条主线前进。在数据领域在给公司创造利润的同时，也是在给自己给别人创造价值。我不要听到“我只是打工混口饭吃而已。”我不希望未来的我发出这样的无奈感慨，我希望听到的是“我很enjoy我的工作，我一直在成长，我是值得公司靠得住的人。”，我希望我的工作能让我超越平常普通的互相利用的雇佣关系。工作应该是愉快的，开心的，而不是每天在公司度日如年。我们经历过疫情、地震，生命何其脆弱与短暂，任何无意义使我们感到痛苦的工作都不值得继续浪费我们的生命。不将就，对于占去生命大半的工作，就应该是自己喜欢并且愿意自动付出投入的事业。查理芒格先生曾在大学对年轻人说“选择与正直的老板共事，选择自己真正热爱的工作，你们还很年轻。” 像国内那种为了拿那点钱在酒席上被强迫醉酒的工作，实在没有意义，世界这么大，人生那么长，希望能活出自己的模样。一家拥有优秀企业文化的公司，才是我们值得共事的公司，值得为之贡献的公司。公司与个人也是一个共同成长的过程，老板不好把老板开了，自己不好削尖脑袋努力提高以达到公司期望。公司有我，我有公司。这就是我理想状态下的工作，然而此刻的现实情况却很骨感，我依旧想任性一回。</p>
+<p>尽力去追求自己愿意做的热爱的事业。环境难，机会少又怎样？！又不是活不下去，股票收入基本能持续覆盖澳洲的生活开支，只不过想要实现财富等级跃迁，想要获得更高质量的生活，在澳洲也必须得工作。有语言短板又如何？多花时间练口语就是了。澳洲面试那一套不会这么办？刷经验，找一个是一个就是了，无非是被拒反正又不亏钱。没什么大不了的，不就是找个理想工作吗！？</p>
+]]></content>
+    </entry>
+</feed>

@@ -1,0 +1,175 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Powerful data pipeline with the boost of DBT  | Big Cat Leo&#39;s Bookshelf</title>
+<link rel="shortcut icon" href="https://leolee-xiaohu.github.io/bigcat.blog//favicon.ico?v=1663568149266">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://leolee-xiaohu.github.io/bigcat.blog//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Powerful data pipeline with the boost of DBT  | Big Cat Leo&#39;s Bookshelf - Atom Feed" href="https://leolee-xiaohu.github.io/bigcat.blog//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="第一次尝试用英文写一篇关于数据工程技术文章。一方面分享下学习体会，另一方面锻炼自己对技术的理解。
+This article is the first try at using DBT in a big data pipeline proje..." />
+    <meta name="keywords" content="Data Engineering" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://leolee-xiaohu.github.io/bigcat.blog/">
+  <img class="avatar" src="https://leolee-xiaohu.github.io/bigcat.blog//images/avatar.png?v=1663568149266" alt="">
+  </a>
+  <h1 class="site-title">
+    Big Cat Leo&#39;s Bookshelf
+  </h1>
+  <p class="site-description">
+    Sharing knowledge and experience
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="https://leolee-xiaohu.github.io/bigcat.blog/" class="menu">
+          Front Page
+        </a>
+      
+    
+      
+        <a href="https://leolee-xiaohu.github.io/bigcat.blog/post/about" class="menu">
+          About me
+        </a>
+      
+    
+      
+        <a href="https://leolee-xiaohu.github.io/bigcat.blog/tags" class="menu">
+          Catalog
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Powerful data pipeline with the boost of DBT 
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-09-18
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://leolee-xiaohu.github.io/bigcat.blog/tag/yF6acbxE9/" class="post-tag">
+                  # Data Engineering
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://leolee-xiaohu.github.io/bigcat.blog//post-images/powerful-data-pipeline-with-the-boost-of-dbt.jpeg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>第一次尝试用英文写一篇关于数据工程技术文章。一方面分享下学习体会，另一方面锻炼自己对技术的理解。</p>
+<p>This article is the first try at using DBT in a big data pipeline project, IMBA. I would like to share my experience of using DBT.</p>
+<p>When I combine DBT with Airflow, I feel the beauty of transformation and orchestration. Before I used DBT, I did not think SQL was a powerful language for data engineers because SQL is not like a programing language, such as python, and is not as flexible as python. However, after using DBT, I don't think SQL is not powerful anymore. What python can do for RDMS can be done by SQL as well. What's more, SQL is easier to write and read and its logic is much clearer than python or scala, which means SQL is easier to maintain.</p>
+<p>Now, let's move deeper into our ELT Pipeline design firstly. The Kinesis Firehose would monitor the order data generated on the frontend in real-time and extract the streaming data into s3. Once s3 receives the streaming data in a particular bucket, it would trigger an event to send sqs to Snowflake snowpipe. The snowpipe would load the streaming data into the snowflake database immediately and automatically. After extracting and loading, BDT would start transformation work. With the help of DBT, I achieved some enhancements, including a clear transformation logic, distinct data lineage, flexible data tests and incremental models. I also used docker to set up the Airflow environment, orchestrate DBT transformation works, and unload the processed final data for Machine Learning into s3 as snowflake external staging data.</p>
+<figure data-type="image" tabindex="1"><img src="https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/a879c6804e3854d04415d16e72b5fe180a8b0ae096e23723.png" alt="" loading="lazy"></figure>
+<p>As you can see, the following picture shows the data lineage of our transformation works, which will help data scientists trace and trust our data. Here, I have two main branches, daily_order_results and non_daily_order_results. Daily_order_results use daily orders, which change and increase as business goes on, while I also use non-daily-order data such as departments and aisles id. By entirely using these data, I can feed data scientists more valuable data to do feature engineering and help them improve the performance of predicting models.</p>
+<figure data-type="image" tabindex="2"><img src="https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/37b33ffd550a42e2084ed4e6e57235901e404a0adb8b3e91.png" alt="" loading="lazy"></figure>
+<p>I also did lots of data testing work to ensure that our data provided to data analysts and scientists are clean and qualified. Our pipeline automatically tests the uniqueness, null value, and relationship integrity. I also used dbt_expectations, a dbt package, to achieve more customized tests. For example, I can test that the particular column of department id must be between 0 and 135. If the final data of the department id are not in this range, it will not pass the test and notify us of the error in the log file. By implementing the tests, our final data prepared for machine learning is 100% correct and high quality.</p>
+<figure data-type="image" tabindex="3"><img src="https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/54e704c34f7326401bfe48a239d174bcf8782dd1b0b8358a.png" alt="" loading="lazy"></figure>
+<p>先写到这里了，之后有空再来改。</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://leolee-xiaohu.github.io/bigcat.blog/post/hello-gridea/">
+              <h3 class="post-title">
+                大猫的土澳求职之旅一：工作与职业的思考
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://leolee-xiaohu.github.io/bigcat.blog//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
